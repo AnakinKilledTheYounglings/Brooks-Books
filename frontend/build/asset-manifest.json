@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/static/css/main.02706584.css",
+    "main.js": "/static/js/main.d95203ed.js",
+    "static/js/453.d855a71b.chunk.js": "/static/js/453.d855a71b.chunk.js",
+    "static/media/treehouse-library.jpg": "/static/media/treehouse-library.13047759a94ef9452533.jpg",
+    "index.html": "/index.html",
+    "main.02706584.css.map": "/static/css/main.02706584.css.map",
+    "main.d95203ed.js.map": "/static/js/main.d95203ed.js.map",
+    "453.d855a71b.chunk.js.map": "/static/js/453.d855a71b.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.02706584.css",
+    "static/js/main.d95203ed.js"
+  ]
+}

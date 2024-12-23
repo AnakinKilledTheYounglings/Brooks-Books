@@ -1,0 +1,80 @@
+# Brooks'Books
+
+A community-driven reading platform where users can share book-related artwork, learn vocabulary, and discuss books.
+
+## Features
+- Book Gallery with drawing uploads
+- Interactive vocabulary learning with etymology
+- Book discussions
+- Points and rewards system
+- Customizable user profiles
+
+## Setup
+
+### Prerequisites
+- Node.js (v14 or higher)
+- MongoDB
+- AWS S3 bucket (for image storage)
+- Google Cloud Translation API
+
+### Environment Variables
+Create `.env` files in both frontend and backend directories:
+
+Backend (.env):
+bash
+PORT=3001
+MONGODB_URI=your_mongodb_uri
+JWT_SECRET=your_jwt_secret
+AWS_ACCESS_KEY_ID=your_aws_key
+AWS_SECRET_ACCESS_KEY=your_aws_secret
+AWS_REGION=your_aws_region
+AWS_BUCKET_NAME=your_bucket_name
+GOOGLE_PROJECT_ID=your_google_project_id
+GOOGLE_APPLICATION_CREDENTIALS=path_to_credentials.json
+
+Frontend (.env)
+REACT_APP_API_URL=http://localhost:3001
+
+Installation:
+1. Clone the repository
+git clone https://github.com/yourusername/brooks-books.git
+
+2. Install Backend Dependencies
+cd backend
+npm install
+
+3. Install Frontend Dependencies
+cd frontend
+npm install
+
+Running the Application
+1. Start the backend server
+cd backend
+npm run dev
+
+2. Start the frontend application
+cd frontend
+npm start
+
+Testing
+npm test
+
+Dependencies
+node_modules/
+Environment variables
+.env
+.env.local
+.env.*.local
+Build files
+/build
+/dist
+Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+IDE files
+.idea/
+.vscode/
+OS files
+.DS_Store
+Thumbs.db
