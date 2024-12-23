@@ -130,21 +130,79 @@ router.get('/:id', async (req, res) => {
 // Create a new book
 router.post('/', auth, async (req, res) => {
   try {
-    const { title, author, description, ageRange } = req.body;
+    const { title, author, description, ageRange, genres, tags } = req.body;
     
+    // Create book in MongoDB
     const book = new Book({
       title,
       author,
       description,
-      ageRange
+      ageRange,
+      genres,
+      tags
     });
 
     await book.save();
+
+    // Add book to Neo4j graph
+    try {
+      await graphService.addBook(book);
+      console.log('Book added to graph database');
+    } catch (graphError) {
+      console.error('Error adding book to graph:', graphError);
+      // Note: We don't want to fail the whole request if graph update fails
+    }
+
     res.status(201).json(book);
   } catch (error) {
+    console.error('Error creating book:', error);
     res.status(400).json({ error: error.message });
   }
 });
+
+//bulk uploads
+router.post('/bulk-upload', [auth, adminAuth, upload.single('bookList')], async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+
+    // Read Excel file
+    const workbook = xlsx.read(req.file.buffer);
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    const books = xlsx.utils.sheet_to_json(sheet);
+
+    // Process and validate each book
+    const processedBooks = books.map(book => ({
+      title: book.title,
+      author: book.author,
+      description: book.description,
+      genres: book.genres?.split(',').map(g => g.trim()) || [],
+      ageRange: {
+        min: parseInt(book.minAge) || 8,
+        max: parseInt(book.maxAge) || 15
+      },
+      tags: book.tags?.split(',').map(t => t.trim()) || []
+    }));
+
+    // Save books to database
+    const savedBooks = await Promise.all(
+      processedBooks.map(bookData => {
+        const book = new Book(bookData);
+        return book.save();
+      })
+    );
+
+    res.status(201).json({
+      message: `Successfully uploaded ${savedBooks.length} books`,
+      books: savedBooks
+    });
+  } catch (error) {
+    console.error('Bulk upload error:', error);
+    res.status(400).json({ error: error.message });
+  }
+});
+
 
 
 // Upload drawing

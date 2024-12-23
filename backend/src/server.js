@@ -13,6 +13,8 @@ import gifsRouter from './routes/gifs.js';
 import discussionsRouter from './routes/discussions.js';
 import { WebSocketServer } from 'ws';
 import http from 'http';
+import recommendationsRouter from './routes/recommendations.js';
+import maintenanceRouter from './routes/maintenance.js';
 
 dotenv.config();
 
@@ -39,6 +41,8 @@ app.use('/api/gifs', gifsRouter);
 app.use('/api/discussions', discussionsRouter);
 app.use('/api/users', usersRouter);  // Changed from /api to /api/users
 app.use('/api/translate', translationRouter);  // Changed from /api to /api/translate
+app.use('/api/recommendations', recommendationsRouter);
+app.use('/api/maintenance', maintenanceRouter);
 
 // Basic test route
 app.get('/test', (req, res) => {
