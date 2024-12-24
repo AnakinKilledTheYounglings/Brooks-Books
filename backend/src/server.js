@@ -18,6 +18,12 @@ import maintenanceRouter from './routes/maintenance.js';
 
 dotenv.config();
 
+const allowedOrigins = [
+  'http://localhost:3000',  // Local development
+  'https://brooks-books-4zl7v1h15-anakinkilledtheyounglings-projects.vercel.app', // Your Vercel domain
+  // Add any other domains you want to allow
+];
+
 // Initialize express and create HTTP server
 const app = express();
 const server = http.createServer(app);
@@ -27,10 +33,20 @@ const wss = new WebSocketServer({ server });
 
 // Middleware
 app.use(cors({
-  origin: 'http://localhost:3000',
-  credentials: true
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
-app.use(express.json());
 
 // Route Middlewares - organize all routes here
 app.use('/api/auth', authRouter);
