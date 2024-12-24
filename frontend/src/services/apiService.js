@@ -11,12 +11,27 @@ class ApiService {
 
   // Auth endpoints
   async login(credentials) {
-    const response = await fetch(`${this.baseUrl}/api/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(credentials)
-    });
-    return this.handleResponse(response);
+      console.log('Login URL:', `${this.baseUrl}/auth/login`); // Debug log
+      console.log('Sending credentials:', credentials); // Debug log
+      
+      const response = await fetch(`${this.baseUrl}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(credentials)
+      });
+  
+      // Add debug logging
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Login failed:', {
+          status: response.status,
+          statusText: response.statusText,
+          error: errorData
+        });
+        throw new Error(errorData.error || 'Login failed');
+      }
+  
+      return this.handleResponse(response);
   }
 
   async register(userData) {

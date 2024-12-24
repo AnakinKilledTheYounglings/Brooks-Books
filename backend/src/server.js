@@ -34,6 +34,10 @@ const wss = new WebSocketServer({ server });
 // Middleware
 app.use(cors({
   origin: function(origin, callback) {
+    const allowedOrigins = [
+      'http://localhost:3000',
+      'https://brooks-books-4zl7v1h15-anakinkilledtheyounglings-projects.vercel.app'
+    ];
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
     
@@ -43,10 +47,12 @@ app.use(cors({
     }
     return callback(null, true);
   },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  credentials: true
 }));
+
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Route Middlewares - organize all routes here
 app.use('/api/auth', authRouter);

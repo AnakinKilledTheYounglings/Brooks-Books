@@ -3,4 +3,8 @@ const config = {
   // Add other configuration variables here
 };
 
+if (process.env.NODE_ENV !== 'production') {
+  console.log('Current API URL:', config.apiUrl);
+}
+
 export default config;
